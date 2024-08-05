@@ -1,0 +1,7 @@
+{
+  "name": "MY FUTA MAP",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
