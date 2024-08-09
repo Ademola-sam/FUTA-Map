@@ -1,13 +1,24 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>tabs</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="explore" href="/tabs/explore">
+      <ion-icon color="tertiary"
+        name="home"></ion-icon>
+    </ion-tab-button>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">tabs</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+    <ion-tab-button tab="map" href="/tabs/map">
+      <ion-icon color="tertiary"
+        name="location"></ion-icon>
+    </ion-tab-button>
+
+    <ion-tab-button tab="events" href="/tabs/events">
+      <ion-icon color="tertiary"
+        name="chatbox-ellipses"></ion-icon>
+    </ion-tab-button>
+
+    <ion-tab-button tab="more" href="/tabs/more">
+      <ion-icon color="tertiary"
+        name="ellipsis-horizontal"></ion-icon>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+</ion-tabs>
