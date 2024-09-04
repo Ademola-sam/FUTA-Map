@@ -5,5 +5,14 @@
 </ion-header>
 
 <ion-content>
-  <!-- <div #map id="map" style="height:100%;"></div> -->
+  <ion-input type="text" [(ngModel)]="message" placeholder="Your message"></ion-input>
+
+  <ion-title>Markers</ion-title>
+
+  <div *ngFor="let maker of markers | async">
+    <!-- <ion-button (click)="flyTop(maker)">{{ maker.properties.message }}</ion-button>
+    <ion-button (click)="removeMaker(maker)" color="danger">delete</ion-button> -->
+  </div>
+
+  <div id="mapa-box" class="map" style="height:100%;"></div>
 </ion-content>
