@@ -5,14 +5,23 @@
 </ion-header>
 
 <ion-content>
-  <ion-input type="text" [(ngModel)]="message" placeholder="Your message"></ion-input>
+  <ion-input type="text"
+    [(ngModel)]="message"
+    placeholder="Your message"></ion-input>
+  <div class="flex">
+    <div>
 
-  <ion-title>Markers</ion-title>
+      <ion-title>Markers</ion-title>
 
-  <div *ngFor="let maker of markers | async">
-    <!-- <ion-button (click)="flyTop(maker)">{{ maker.properties.message }}</ion-button>
-    <ion-button (click)="removeMaker(maker)" color="danger">delete</ion-button> -->
+      <div *ngFor="let maker of markers">
+        <ion-button (click)="flyTo(maker)">{{ maker.properties.message }}</ion-button>
+        <ion-button (click)="removeMarker(maker.id)"
+          color="danger">delete</ion-button>
+      </div>
+    </div>
+
+    <div id="mapa-box"
+      class="map"
+      style="height:100%;"></div>
   </div>
-
-  <div id="mapa-box" class="map" style="height:100%;"></div>
 </ion-content>
