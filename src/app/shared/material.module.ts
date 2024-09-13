@@ -7,6 +7,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 const materialModulesImport = [
   MatInputModule,
@@ -17,6 +18,7 @@ const materialModulesImport = [
   MatStepperModule,
   MatSelectModule,
   MatDatepickerModule,
+  MatNativeDateModule,
 ];
 
 @NgModule({

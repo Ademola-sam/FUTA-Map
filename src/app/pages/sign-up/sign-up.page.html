@@ -1,0 +1,51 @@
+<ion-content [fullscreen]="true">
+  <div class="flex items-center h-full">
+    <div>
+
+    </div>
+    <div>
+      <ion-card class="ion-padding py-20">
+        <ion-card-title class="ion-text-center text-3xl">Sign Up</ion-card-title>
+
+        <div class="mt-10">
+          <form>
+
+            <mat-form-field class="w-full">
+              <mat-label>Full Name</mat-label>
+              <input type="full-name"
+                matInput
+                required>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+              <mat-label>Email</mat-label>
+              <input type="email"
+                matInput
+                required>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+              <mat-label>Password</mat-label>
+              <input type="password"
+                matInput
+                required>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+              <mat-label>Confirm Password</mat-label>
+              <input type="password"
+                matInput
+                required>
+            </mat-form-field>
+
+            <div class="flex ion-justify-content-center w-full">
+              <button mat-flat-button
+                class="w-72">Sign Up</button>
+            </div>
+
+          </form>
+        </div>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>
