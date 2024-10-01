@@ -28,13 +28,20 @@ export class MapPage implements OnInit {
     this.ds.getMarkers().subscribe(
       (markers) => {
         // Log the markers data
-        console.log('Markers => ', markers[1].properties.message);
+        console.log('Markers => ', markers[1]);
 
         // Assign the markers to a property if needed
         this.markers = markers;
 
         // Now that markers are available, initialize the map
         this.initializeMap();
+
+        markers.forEach((coordinate) => {
+          this.addTextMarker(
+            coordinate.geometry.coordinates,
+            coordinate.properties.message
+          );
+        });
       },
       (error) => {
         // Handle any errors that occur during fetching
@@ -156,6 +163,19 @@ export class MapPage implements OnInit {
 
       // Create map layers with real-time data after the style has loaded
     });
+  }
+
+  addTextMarker(coordinates: number[], message: string) {
+    const popup = new mapboxgl.Popup()
+      .setLngLat(coordinates as [number, number])
+      .setHTML(`<p style="color: blue; font-size:16px;">${message}</p>`)
+      .addTo(this.map);
+
+    new mapboxgl.Marker()
+      .setLngLat(coordinates as [number, number])
+      .setPopup(popup)
+      .addTo(this.map)
+      .togglePopup();
   }
 
   // Helpers

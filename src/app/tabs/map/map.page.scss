@@ -1,4 +1,12 @@
-#map{
-    height: 100%;
-    width: 100%;
+#mapa-box {
+  height: 90vh;
+  width: 100%;
+}
+
+.mapboxgl-popup {
+  background-color: blue !important;
+}
+
+.mapboxgl-popup .mapboxgl-popup-content p {
+  color: red !important;
 }

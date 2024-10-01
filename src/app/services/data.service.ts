@@ -5,6 +5,7 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
@@ -43,4 +44,8 @@ export class DataService {
   removeMaker(maker_id: any) {
     return this.afs.doc('/makers/' + maker_id).delete();
   }
+
+  // createUserProfile(info: any) {
+  //   await this.afs.collection('user').doc().set({});
+  // }
 }

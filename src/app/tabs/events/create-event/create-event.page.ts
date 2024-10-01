@@ -5,7 +5,6 @@ import {
   inject,
 } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-create-event',
@@ -26,10 +25,23 @@ export class CreateEventPage {
   private _formBuilder = inject(FormBuilder);
 
   firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
+    eventName: ['', Validators.required],
+    file: ['', Validators.required],
+    eventDescription: ['', Validators.required],
+    eventType: ['', Validators.required],
+    organizerName: ['', Validators.required],
+    eventDate: ['', Validators.required],
+    location: ['', Validators.required],
   });
   secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+    eventStatus: ['', Validators.required],
   });
   isLinear = false;
+
+  onSubmit() {
+    const formValue = this.firstFormGroup.value;
+    const formValue1 = this.secondFormGroup.value;
+
+    console.log('Form Value:', formValue, formValue1);
+  }
 }
