@@ -5,11 +5,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <button mat-raised-button
-    (click)="isLinear = !isLinear"
-    id="toggle-linear">
-    {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
-  </button>
   <mat-stepper orientation="vertical"
     [linear]="isLinear"
     #stepper>
@@ -23,10 +18,26 @@
             required>
         </mat-form-field>
 
-        <div appearance="fill">
-          <mat-label>Select File</mat-label>
-          <input type="file"
-            formControlName="file">
+        <div class="rounded-md border border-indigo-500 bg-gray-50 p-4 shadow-md mb-6"
+          style="width: 200px;">
+          <label for="upload"
+            class="flex flex-col items-center gap-2 cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg"
+              class="h-10 w-10 fill-white stroke-indigo-500"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2">
+              <path stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span class="text-gray-600 font-medium">Upload Event image</span>
+          </label>
+          <input id="upload"
+            formControlName="file"
+            type="file"
+            (change)="onFileSelected($event)"
+            class="hidden" />
         </div>
 
         <mat-form-field class="w-full">
@@ -38,9 +49,8 @@
         <mat-form-field>
           <mat-label>Event type</mat-label>
           <mat-select formControlName="eventType">
-            @for (eventType of eventTypes; track eventTypes) {
-            <mat-option [value]="eventType.value">{{eventType.viewValue}}</mat-option>
-            }
+            <mat-option [value]="eventType.value"
+              *ngFor="let eventType of eventTypes">{{eventType.viewValue}}</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -51,18 +61,20 @@
             formControlName="organizerName">
         </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Choose a date</mat-label>
-          <input matInput
-            [matDatepicker]="picker"
-            formControlName="eventDate">
-          <mat-hint>MM/DD/YYYY</mat-hint>
-          <mat-datepicker-toggle matIconSuffix
-            [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+        <div>
+          <mat-form-field>
+            <mat-label>Choose a date</mat-label>
+            <input matInput
+              [matDatepicker]="picker"
+              formControlName="eventDate">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix
+              [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field class="mt-4">
+        <mat-form-field class="mt-4 w-full">
           <mat-label>Address</mat-label>
           <input matInput
             formControlName="location"
@@ -81,7 +93,7 @@
     <mat-step [stepControl]="secondFormGroup">
       <ng-template matStepLabel>Done</ng-template>
       <form [formGroup]="secondFormGroup">
-        <mat-form-field>
+        <mat-form-field class="mt-7">
           <mat-label>Event Status</mat-label>
           <mat-select formControlName="eventStatus">
             <mat-option value="Draft">Draft</mat-option>

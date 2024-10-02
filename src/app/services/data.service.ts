@@ -6,6 +6,7 @@ import {
   AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
@@ -16,14 +17,13 @@ import * as mapboxgl from 'mapbox-gl';
   providedIn: 'root',
 })
 export class DataService {
-  constructor(private afs: AngularFirestore) {
+  constructor(private afs: AngularFirestore, private afAuth: AngularFireAuth) {
     (mapboxgl as any).accessToken = environment.MAPBOX_KEY.accessToken;
   }
 
   getMarkers(): Observable<any[]> {
     const makerRef: AngularFirestoreCollection<any> =
       this.afs.collection('/makers');
-
     // Use `snapshotChanges()` to get the document data along with the ID
     return makerRef.snapshotChanges().pipe(
       map((actions) =>
@@ -44,8 +44,4 @@ export class DataService {
   removeMaker(maker_id: any) {
     return this.afs.doc('/makers/' + maker_id).delete();
   }
-
-  // createUserProfile(info: any) {
-  //   await this.afs.collection('user').doc().set({});
-  // }
 }

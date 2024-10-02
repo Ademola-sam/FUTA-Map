@@ -78,9 +78,9 @@ export class SignUpPage implements OnInit {
         // Show success toast and navigate
         this.presentToast('User registered successfully!', 'success');
         this.router.navigate(['/sign-in']);
-      } catch (error) {
+      } catch (error: any) {
         // Handle error during registration
-        this.presentToast('Registration failed: ' + error);
+        this.presentToast('Registration failed: ' + error.message);
       }
     } else {
       this.presentToast('Please fill out all required fields');
