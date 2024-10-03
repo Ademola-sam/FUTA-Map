@@ -19,16 +19,13 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-card *ngFor="
-          let
-          event
-          of
-          events"
-          class="flex">
-          <div class="w-10 h-full overflow-hidden bg-red-600">
-            <!-- <img src="{{event.fileURL}}"
-              class="shadow rounded-lg overflow-hidden border"> -->
+        <ion-card *ngFor="let event of events"
+          class="event-card">
+          <div class="image-container">
+            <ion-img [src]="event.fileURL"
+              class="custom-img"></ion-img>
           </div>
+
           <div>
             <ion-card-header>
               <ion-card-title>{{ event.eventName }}</ion-card-title>
@@ -40,20 +37,22 @@
             </ion-card-header>
 
             <ion-card-content>
-              <p>{{ event.eventDate?.toDate() | date}} - <span>10:00PM</span></p>
-              {{event.eventDescription}}
+              <p>{{ event.eventDate?.toDate() | date }} - <span>10:00PM</span></p>
+              {{ event.eventDescription }}
             </ion-card-content>
 
-            <ion-button fill="clear">
-              <ion-icon slot="start"
-                name="thumbs-up-outline"></ion-icon>
-              20
-            </ion-button>
-            <ion-button fill="clear">
-              <ion-icon slot="start"
-                name="bookmark-outline"></ion-icon>
-              12
-            </ion-button>
+            <div class="buttons">
+              <ion-button fill="clear">
+                <ion-icon slot="start"
+                  name="thumbs-up-outline"></ion-icon>
+                20
+              </ion-button>
+              <ion-button fill="clear">
+                <ion-icon slot="start"
+                  name="bookmark-outline"></ion-icon>
+                12
+              </ion-button>
+            </div>
           </div>
         </ion-card>
       </ion-col>

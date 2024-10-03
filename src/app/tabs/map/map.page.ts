@@ -15,8 +15,8 @@ import { environment } from 'src/environments/environment';
 export class MapPage implements OnInit {
   public map: mapboxgl.Map;
   public style = 'mapbox://styles/mapbox/streets-v11';
-  lat = 7.250771;
-  lng = 5.210266;
+  lat = 7.3067797;
+  lng = 5.1390878;
   message = 'Hello world';
 
   //  Data
@@ -54,15 +54,16 @@ export class MapPage implements OnInit {
 
   private initializeMap() {
     // local the user
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.lat = position.coords.latitude;
-        this.lng = position.coords.longitude;
-        this.map.flyTo({
-          center: [this.lng, this.lat],
-        });
-      });
-    }
+    // if (navigator.geolocation) {
+    //   navigator.geolocation.getCurrentPosition((position) => {
+    //     this.lat = position.coords.latitude;
+    //     this.lng = position.coords.longitude;
+    //     this.map.flyTo({
+    //       center: [this.lng, this.lat],
+    //     });
+    //   });
+    // }
+
     this.buildMap();
   }
 
@@ -74,86 +75,98 @@ export class MapPage implements OnInit {
       center: [this.lng, this.lat],
     });
 
+    const popup = new mapboxgl.Popup()
+      .setLngLat([this.lng, this.lat])
+      .setHTML(`<p style="color: blue; font-size:18px; font-weight:600;">FUTA</p>`)
+      .addTo(this.map);
+
+    // Add a marker at the same location
+    new mapboxgl.Marker({ color: 'red' })
+      .setLngLat([this.lng, this.lat]) // Set the marker's coordinates
+      .setPopup(popup)
+      .addTo(this.map)
+      .togglePopup();
+
     // Dynamically import MapboxDirections
-    import('@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions').then(
-      (MapboxDirections) => {
-        const directions = new MapboxDirections.default({
-          accessToken: environment.MAPBOX_KEY.accessToken, // Your Mapbox access token
-          unit: 'metric',
-          profile: 'mapbox/driving',
-          alternatives: false, // Show alternative routes
-          geometries: 'geojson',
-          controls: {
-            inputs: false,
-            instructions: true,
-          },
-        });
+    // import('@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions').then(
+    //   (MapboxDirections) => {
+    //     const directions = new MapboxDirections.default({
+    //       accessToken: environment.MAPBOX_KEY.accessToken, // Your Mapbox access token
+    //       unit: 'metric',
+    //       profile: 'mapbox/driving',
+    //       alternatives: false, // Show alternative routes
+    //       geometries: 'geojson',
+    //       controls: {
+    //         inputs: false,
+    //         instructions: true,
+    //       },
+    //     });
 
-        this.map.addControl(directions, 'bottom-right'); // Add directions control to the map
+    //     this.map.addControl(directions, 'bottom-right'); // Add directions control to the map
 
-        // Set initial origin and destination
-        const origin = [-77.0369, 38.9072]; // Example: Washington, D.C.
-        const destination = [-77.0439, 38.8895]; // Example: Lincoln Memorial
+    //     // Set initial origin and destination
+    //     const origin = [-77.0369, 38.9072]; // Example: Washington, D.C.
+    //     const destination = [-77.0439, 38.8895]; // Example: Lincoln Memorial
 
-        // Set origin and destination in directions control
-        directions.setOrigin(origin);
-        directions.setDestination(destination);
+    //     // Set origin and destination in directions control
+    //     directions.setOrigin(origin);
+    //     directions.setDestination(destination);
 
-        // Create markers for origin and destination
-        const originMarker = new mapboxgl.Marker({ color: 'green' }) // Customize the color or use a custom icon
-          .setLngLat(origin as [number, number])
-          .addTo(this.map);
+    //     // Create markers for origin and destination
+    //     const originMarker = new mapboxgl.Marker({ color: 'green' }) // Customize the color or use a custom icon
+    //       .setLngLat(origin as [number, number])
+    //       .addTo(this.map);
 
-        const destinationMarker = new mapboxgl.Marker({ color: 'red' }) // Customize the color or use a custom icon
-          .setLngLat(destination as [number, number])
-          .addTo(this.map);
+    //     const destinationMarker = new mapboxgl.Marker({ color: 'red' }) // Customize the color or use a custom icon
+    //       .setLngLat(destination as [number, number])
+    //       .addTo(this.map);
 
-        // Inside the route event handler
-        directions.on(
-          'route',
-          (event: { route: { geometry: { coordinates: any } }[] }) => {
-            // Clear any existing routes
-            if (this.map.getLayer('route')) {
-              this.map.removeLayer('route');
-            }
-            if (this.map.getSource('route')) {
-              this.map.removeSource('route');
-            }
+    //     // Inside the route event handler
+    //     directions.on(
+    //       'route',
+    //       (event: { route: { geometry: { coordinates: any } }[] }) => {
+    //         // Clear any existing routes
+    //         if (this.map.getLayer('route')) {
+    //           this.map.removeLayer('route');
+    //         }
+    //         if (this.map.getSource('route')) {
+    //           this.map.removeSource('route');
+    //         }
 
-            // Create a GeoJSON source from the route
-            const routeGeoJSON: Feature<LineString> = {
-              type: 'Feature', // Set the type to "Feature"
-              properties: {}, // Include an empty properties object
-              geometry: {
-                type: 'LineString', // Specify the geometry type as "LineString"
-                coordinates: event.route[0].geometry.coordinates, // Get the route geometry coordinates
-              },
-            };
+    //         // Create a GeoJSON source from the route
+    //         const routeGeoJSON: Feature<LineString> = {
+    //           type: 'Feature', // Set the type to "Feature"
+    //           properties: {}, // Include an empty properties object
+    //           geometry: {
+    //             type: 'LineString', // Specify the geometry type as "LineString"
+    //             coordinates: event.route[0].geometry.coordinates, // Get the route geometry coordinates
+    //           },
+    //         };
 
-            // Add the route as a new source
-            this.map.addSource('route', {
-              type: 'geojson',
-              data: routeGeoJSON,
-            });
+    //         // Add the route as a new source
+    //         this.map.addSource('route', {
+    //           type: 'geojson',
+    //           data: routeGeoJSON,
+    //         });
 
-            // Add a layer to visualize the route
-            this.map.addLayer({
-              id: 'route',
-              type: 'line',
-              source: 'route',
-              layout: {
-                'line-join': 'round',
-                'line-cap': 'round',
-              },
-              paint: {
-                'line-color': '#888', // Customize the line color
-                'line-width': 10, // Customize the line width
-              },
-            });
-          }
-        );
-      }
-    );
+    //         // Add a layer to visualize the route
+    //         this.map.addLayer({
+    //           id: 'route',
+    //           type: 'line',
+    //           source: 'route',
+    //           layout: {
+    //             'line-join': 'round',
+    //             'line-cap': 'round',
+    //           },
+    //           paint: {
+    //             'line-color': '#888', // Customize the line color
+    //             'line-width': 10, // Customize the line width
+    //           },
+    //         });
+    //       }
+    //     );
+    //   }
+    // );
 
     // Add map controls
     this.map.addControl(new mapboxgl.NavigationControl());

@@ -1,0 +1,64 @@
+.event-card {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.image-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+
+.custom-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image scales properly without stretching */
+}
+
+.ion-align-items-center {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+/* Media queries for responsiveness */
+@media (min-width: 768px) {
+  .event-card {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .image-container {
+    width: 40%; /* Take 40% of the width on larger screens */
+  }
+
+  .custom-img {
+    height: auto; /* Maintain aspect ratio */
+  }
+
+  ion-card-header {
+    width: 60%;
+  }
+}
+
+@media (max-width: 767px) {
+  .event-card {
+    flex-direction: column;
+  }
+
+  .image-container {
+    width: 100%;
+  }
+
+  ion-card-header {
+    width: 100%;
+  }
+}
