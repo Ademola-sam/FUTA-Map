@@ -6,6 +6,7 @@ import { GeoJson } from 'src/app/schema/mapGeo';
 // import { Feature, FeatureCollection, Point, GeoJsonProperties } from 'geojson';
 import { Feature, Geometry, GeoJSON, LineString } from 'geojson';
 import { environment } from 'src/environments/environment';
+import * as MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
 
 @Component({
   selector: 'app-map',
@@ -23,33 +24,37 @@ export class MapPage implements OnInit {
   source: any;
   markers: any;
 
-  constructor(private ds: DataService) {}
+  constructor(private ds: DataService) {
+    (mapboxgl as any).accessToken = environment.MAPBOX_KEY.accessToken;
+  }
 
   ngOnInit() {
-    // Subscribe to the markers observable
-    this.ds.getMarkers().subscribe(
-      (markers) => {
-        // Log the markers data
-        console.log('Markers => ', markers[1]);
+    // // Subscribe to the markers observable
+    // this.ds.getMarkers().subscribe(
+    //   (markers) => {
+    //     // Log the markers data
+    //     console.log('Markers => ', markers[1]);
 
-        // Assign the markers to a property if needed
-        this.markers = markers;
+    //     // Assign the markers to a property if needed
+    //     this.markers = markers;
 
-        // Now that markers are available, initialize the map
-        this.initializeMap();
+    //     // Now that markers are available, initialize the map
+    //     this.initializeMap();
 
-        markers.forEach((coordinate) => {
-          this.addTextMarker(
-            coordinate.geometry.coordinates,
-            coordinate.properties.message
-          );
-        });
-      },
-      (error) => {
-        // Handle any errors that occur during fetching
-        console.error('Error fetching markers:', error);
-      }
-    );
+    //     markers.forEach((coordinate) => {
+    //       this.addTextMarker(
+    //         coordinate.geometry.coordinates,
+    //         coordinate.properties.message
+    //       );
+    //     });
+    //   },
+    //   (error) => {
+    //     // Handle any errors that occur during fetching
+    //     console.error('Error fetching markers:', error);
+    //   }
+    // );
+
+    this.initializeMap();
   }
 
   private initializeMap() {
@@ -75,32 +80,24 @@ export class MapPage implements OnInit {
       center: [this.lng, this.lat],
     });
 
-    const popup = new mapboxgl.Popup()
-      .setLngLat([this.lng, this.lat])
-      .setHTML(`<p style="color: blue; font-size:18px; font-weight:600;">FUTA</p>`)
-      .addTo(this.map);
+    // const popup = new mapboxgl.Popup()
+    //   .setLngLat([this.lng, this.lat])
+    //   .setHTML(
+    //     `<p style="color: blue; font-size:18px; font-weight:600;">FUTA</p>`
+    //   )
+    //   .addTo(this.map);
 
     // Add a marker at the same location
-    new mapboxgl.Marker({ color: 'red' })
-      .setLngLat([this.lng, this.lat]) // Set the marker's coordinates
-      .setPopup(popup)
-      .addTo(this.map)
-      .togglePopup();
+    // new mapboxgl.Marker({ color: 'red' })
+    //   .setLngLat([this.lng, this.lat]) // Set the marker's coordinates
+    //   .setPopup(popup)
+    //   .addTo(this.map)
+    //   .togglePopup();
 
     // Dynamically import MapboxDirections
-    // import('@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions').then(
-    //   (MapboxDirections) => {
-    //     const directions = new MapboxDirections.default({
-    //       accessToken: environment.MAPBOX_KEY.accessToken, // Your Mapbox access token
-    //       unit: 'metric',
-    //       profile: 'mapbox/driving',
-    //       alternatives: false, // Show alternative routes
-    //       geometries: 'geojson',
-    //       controls: {
-    //         inputs: false,
-    //         instructions: true,
-    //       },
-    //     });
+    import('@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions').then(
+      (MapboxDirections) => {}
+    );
 
     //     this.map.addControl(directions, 'bottom-right'); // Add directions control to the map
 
@@ -169,11 +166,11 @@ export class MapPage implements OnInit {
     // );
 
     // Add map controls
-    this.map.addControl(new mapboxgl.NavigationControl());
+    const navControl = new mapboxgl.NavigationControl({
+      visualizePitch: true,
+    });
 
-    this.map.scrollZoom.enable(); // Enable zooming using scroll
-    this.map.dragPan.enable(); // Enable panning the map
-
+    this.map.addControl(navControl, 'top-right');
     // Add geolocate control to the map.
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
@@ -183,97 +180,137 @@ export class MapPage implements OnInit {
       showUserHeading: true, // Display the user's direction
     });
 
+    geolocate.on('geolocate', locateUser);
+
     // Add the control to the map
     this.map.addControl(geolocate);
+    this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-right');
 
-    // Add marker on click
-    this.map.on('click', (e) => {
-      console.log('e => ', e);
-      const coordinates = [e.lngLat.lng, e.lngLat.lat];
-      console.log('Coordinate => ', coordinates);
-      const newMaker = new GeoJson(coordinates, { message: this.message });
-      console.log('New-Maker => ', newMaker);
-
-      // Convert maker to plain object
-      const plainMaker = newMaker.toPlainObject();
-      console.log('PlainMaker => ', plainMaker);
-
-      this.ds.createMaker(plainMaker);
+    this.map.on('load', () => {
+      geolocate.trigger();
     });
 
-    // Add Firestore data source on map load
-    this.map.on('load', () => {
-      // Add the source if not already added
-      if (!this.map.getSource('firebase')) {
-        this.map.addSource('firebase', {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [],
-          },
-        });
+    var directions = new MapboxDirections.default({
+      accessToken: environment.MAPBOX_KEY.accessToken,
+      unit: 'metric',
+      profile: 'mapbox/driving',
+      container: 'directions',
+      bearing: true,
+      steps: true,
+      voice_instructions: true,
+      controls: {
+        inputs: true,
+        instructions: true,
+        profileSwitcher: true,
+      },
+    });
+    this.map.addControl(directions, 'top-left');
 
-        // Optionally add a layer to visualize the data
-        this.map.addLayer({
-          id: 'firebase-layer',
-          type: 'symbol',
-          source: 'firebase',
-          layout: {
-            'text-field': '{message}',
-            'text-size': 24,
-            'text-transform': 'uppercase',
-            'icon-image': 'rocket-15',
-            'text-offset': [0, 1.5],
-          },
-          paint: {
-            'text-color': '#f16624',
-            'text-halo-color': '#fff',
-            'text-halo-width': 2,
-          },
+    this.map.on('load', function () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          directions.setOrgin([
+            position.coords.longitude,
+            position.coords.latitude,
+          ]);
         });
       }
-
-      // Get the source after it's added
-      // this.markers.subscribe((markers: any) => {
-      //   console.log('Marker111 => ', markers);
-      //   if (!Array.isArray(markers)) {
-      //     console.error('Markers data is not an array.', markers);
-      //     return;
-      //   }
-      //   console.log('Continue2');
-
-      //   const features = markers
-      //     .map((marker: any) => {
-      //       if (marker) {
-      //         console.log('Valid marker with coordinates:', marker.coordinates);
-      //       }
-      //       console.log('Continue2', features);
-      //       return {
-      //         type: 'Feature',
-      //         geometry: {
-      //           type: 'Point',
-      //           coordinates: marker.coordinates,
-      //         },
-      //         properties: marker.properties || {},
-      //       };
-      //     })
-      //     .filter((feature: any) => feature !== null);
-
-      //   const data: FeatureCollection<Point, GeoJsonProperties> = {
-      //     type: 'FeatureCollection',
-      //     features: features as Feature<Point, GeoJsonProperties>[],
-      //   };
-
-      //   const source = this.map.getSource('firebase') as mapboxgl.GeoJSONSource;
-      //   if (source) {
-      //     source.setData(data);
-      //   } else {
-      //     console.error('Firebase source not found');
-      //   }
-      // });
-
-      // Create map layers with real-time data after the style has loaded
     });
+
+    function locateUser(e: any) {
+      console.log(
+        'Lng :' + e.coords.longitude + ' ' + 'Lat :' + e.coords.latitude
+      );
+    }
+
+    // Add marker on click
+    // this.map.on('click', (e) => {
+    //   console.log('e => ', e);
+    //   const coordinates = [e.lngLat.lng, e.lngLat.lat];
+    //   console.log('Coordinate => ', coordinates);
+    //   const newMaker = new GeoJson(coordinates, { message: this.message });
+    //   console.log('New-Maker => ', newMaker);
+
+    //   // Convert maker to plain object
+    //   const plainMaker = newMaker.toPlainObject();
+    //   console.log('PlainMaker => ', plainMaker);
+
+    //   this.ds.createMaker(plainMaker);
+    // });
+
+    // Add Firestore data source on map load
+    // this.map.on('load', () => {
+    //   // Add the source if not already added
+    //   if (!this.map.getSource('firebase')) {
+    //     this.map.addSource('firebase', {
+    //       type: 'geojson',
+    //       data: {
+    //         type: 'FeatureCollection',
+    //         features: [],
+    //       },
+    //     });
+
+    //     // Optionally add a layer to visualize the data
+    //     this.map.addLayer({
+    //       id: 'firebase-layer',
+    //       type: 'symbol',
+    //       source: 'firebase',
+    //       layout: {
+    //         'text-field': '{message}',
+    //         'text-size': 24,
+    //         'text-transform': 'uppercase',
+    //         'icon-image': 'rocket-15',
+    //         'text-offset': [0, 1.5],
+    //       },
+    //       paint: {
+    //         'text-color': '#f16624',
+    //         'text-halo-color': '#fff',
+    //         'text-halo-width': 2,
+    //       },
+    //     });
+    //   }
+
+    //   // Get the source after it's added
+    //   // this.markers.subscribe((markers: any) => {
+    //   //   console.log('Marker111 => ', markers);
+    //   //   if (!Array.isArray(markers)) {
+    //   //     console.error('Markers data is not an array.', markers);
+    //   //     return;
+    //   //   }
+    //   //   console.log('Continue2');
+
+    //   //   const features = markers
+    //   //     .map((marker: any) => {
+    //   //       if (marker) {
+    //   //         console.log('Valid marker with coordinates:', marker.coordinates);
+    //   //       }
+    //   //       console.log('Continue2', features);
+    //   //       return {
+    //   //         type: 'Feature',
+    //   //         geometry: {
+    //   //           type: 'Point',
+    //   //           coordinates: marker.coordinates,
+    //   //         },
+    //   //         properties: marker.properties || {},
+    //   //       };
+    //   //     })
+    //   //     .filter((feature: any) => feature !== null);
+
+    //   //   const data: FeatureCollection<Point, GeoJsonProperties> = {
+    //   //     type: 'FeatureCollection',
+    //   //     features: features as Feature<Point, GeoJsonProperties>[],
+    //   //   };
+
+    //   //   const source = this.map.getSource('firebase') as mapboxgl.GeoJSONSource;
+    //   //   if (source) {
+    //   //     source.setData(data);
+    //   //   } else {
+    //   //     console.error('Firebase source not found');
+    //   //   }
+    //   // });
+
+    //   // Create map layers with real-time data after the style has loaded
+    // });
   }
 
   addTextMarker(coordinates: number[], message: string) {
