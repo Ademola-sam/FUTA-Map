@@ -1,5 +1,5 @@
 // import { MapType } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 import { DataService } from 'src/app/services/data.service';
 import { GeoJson } from 'src/app/schema/mapGeo';
@@ -7,6 +7,7 @@ import { GeoJson } from 'src/app/schema/mapGeo';
 import { Feature, Geometry, GeoJSON, LineString } from 'geojson';
 import { environment } from 'src/environments/environment';
 import * as MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-map',
@@ -15,7 +16,7 @@ import * as MapboxDirections from '@mapbox/mapbox-gl-directions/dist/mapbox-gl-d
 })
 export class MapPage implements OnInit {
   public map: mapboxgl.Map;
-  public style = 'mapbox://styles/mapbox/streets-v11';
+  public style = 'mapbox://styles/mapbox/streets-v12';
   lat = 7.3067797;
   lng = 5.1390878;
   message = 'Hello world';
@@ -78,6 +79,11 @@ export class MapPage implements OnInit {
       style: this.style,
       zoom: 14,
       center: [this.lng, this.lat],
+    });
+
+    // Ensure map is resized correctly after load
+    this.map.on('load', () => {
+      this.map.resize();
     });
 
     // const popup = new mapboxgl.Popup()

@@ -1,0 +1,32 @@
+<link rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.3.1/mapbox-gl-directions.css"
+  type="text/css">
+
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css"
+  rel="stylesheet">
+
+<ion-content scrollY="false">
+  <div>
+
+    <div class="marker">
+      <ion-input [(ngModel)]="message"
+        fill="solid"
+        color="warn"
+        placeholder="Enter location name"></ion-input>
+      <div class="">
+
+
+        <div *ngFor="let marker of markers">
+          <ion-button (click)="flyTo(marker)">{{ marker.properties.message }}</ion-button>
+          <ion-button (click)="removeMarker(marker.id)"
+            color="danger">delete</ion-button>
+        </div>
+      </div>
+    </div>
+
+    <div #container
+      id="map-box"
+      class="map"
+      style="width: 100%; height: 94vh;"></div>
+  </div>
+</ion-content>

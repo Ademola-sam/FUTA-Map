@@ -1,12 +1,11 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>map</ion-title>
-  </ion-toolbar>
-</ion-header>
-<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.2/mapbox-gl.css'
-  rel='stylesheet' />
+<link rel="stylesheet"
+  href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.3.1/mapbox-gl-directions.css"
+  type="text/css">
 
-<ion-content>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css"
+  rel="stylesheet">
+
+<ion-content scrollY="false">
   <!-- <ion-input type="text"
     [(ngModel)]="message"
     placeholder="Your message"></ion-input> -->
@@ -22,8 +21,9 @@
       </div>
     </div> -->
 
-    <div id="mapa-box"
+    <div #container
+      id="mapa-box"
       class="map"
-      style="height: 90vh;"></div>
+      style="width: 100%; height: 94vh;"></div>
   </div>
 </ion-content>
