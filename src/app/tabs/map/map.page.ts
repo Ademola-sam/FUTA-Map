@@ -22,10 +22,13 @@ export class MapPage implements OnInit {
   lng = 5.1390878;
 
   searchResult: any[] = [];
+  public setDestination: any[] = [];
 
   //  Data
   source: any;
   markers: any;
+
+  directions: any;
 
   constructor(private ds: DataService, private ld: LocationDataService) {
     (mapboxgl as any).accessToken = environment.MAPBOX_KEY.accessToken;
@@ -92,6 +95,13 @@ export class MapPage implements OnInit {
       if (keyline) {
         keyline.style.display = 'none';
       }
+
+      const cycling = document.querySelector(
+        '.mapboxgl-ctrl-directions.mapboxgl-ctrl'
+      ) as HTMLElement;
+      if (cycling) {
+        cycling.style.marginTop = '60px';
+      }
     });
 
     // const popup = new mapboxgl.Popup()
@@ -129,11 +139,7 @@ export class MapPage implements OnInit {
     this.map.addControl(geolocate, 'bottom-right');
     this.map.addControl(new mapboxgl.ScaleControl(), 'bottom-left');
 
-    this.map.on('load', () => {
-      geolocate.trigger();
-    });
-
-    var directions = new MapboxDirections.default({
+    this.directions = new MapboxDirections.default({
       accessToken: environment.MAPBOX_KEY.accessToken,
       unit: 'metric',
       profile: 'mapbox/driving',
@@ -147,22 +153,34 @@ export class MapPage implements OnInit {
         profileSwitcher: true,
       },
     });
-    this.map.addControl(directions, 'top-left');
+    this.map.addControl(this.directions, 'top-left');
 
-    this.map.on('load', function () {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          directions.setOrgin([
-            position.coords.longitude,
-            position.coords.latitude,
-          ]);
-        });
-      }
+    this.map.on('load', () => {
+      geolocate.trigger();
+      this.setInitialOrigin();
+      this.updateDirectionsDestination();
     });
 
     function locateUser(e: any) {
       console.log(
         'Lng :' + e.coords.longitude + ' ' + 'Lat :' + e.coords.latitude
+      );
+    }
+  }
+
+  setInitialOrigin() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.directions.setOrigin([
+            position.coords.longitude,
+            position.coords.latitude,
+          ]);
+        },
+        (error) => {
+          console.error('Error fetching location for origin:', error);
+        },
+        { enableHighAccuracy: true }
       );
     }
   }
@@ -173,20 +191,30 @@ export class MapPage implements OnInit {
       this.searchResult = [];
       return;
     }
+    const regex = new RegExp(value, 'i');
+
     const data = await this.ld.locations;
-    const results = data.filter((location) =>
-      location.Location.toLowerCase().includes(value)
-    );
+    const results = data.filter((location) => regex.test(location.Location));
 
     this.searchResult = results;
   }
 
   flyTo(data: any) {
-    console.log('Flyto => ', data);
     this.map.flyTo({
       center: [data.Latitude, data.Longitude],
     });
+    this.setDestination = [data.Latitude, data.Longitude];
+    this.updateDirectionsDestination();
     this.searchResult = [];
     return;
+  }
+
+  updateDirectionsDestination() {
+    if (this.setDestination && this.setDestination.length > 0) {
+      this.directions.setDestination([
+        this.setDestination[0],
+        this.setDestination[1],
+      ]);
+    }
   }
 }

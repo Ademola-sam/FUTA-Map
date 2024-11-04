@@ -12,7 +12,8 @@
       <ion-searchbar (ionInput)="inputChanged($event)"
         animated="true"
         placeholder="Search for location"></ion-searchbar>
-      <ion-list [hidden]="searchResult.length <= 0">
+      <ion-list [hidden]="searchResult.length <= 0"
+        class="overflow-y-scroll max-h-96">
         <ion-item [button]="true"
           (click)="flyTo(result)"
           *ngFor="let result of searchResult">
