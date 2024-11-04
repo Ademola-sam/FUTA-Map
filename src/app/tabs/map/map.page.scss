@@ -1,7 +1,30 @@
+ion-content {
+  position: relative;
+
+  .destination-search {
+    position: absolute;
+    top: 10px;
+    z-index: 100;
+    width: 100%;
+    ion-searchbar {
+      --border-radius: 10px;
+    }
+    ion-list {
+      margin: auto 10px;
+    }
+  }
+}
+
 .mapboxgl-popup {
   background-color: blue !important;
 }
 
 .mapboxgl-popup .mapboxgl-popup-content p {
   color: red !important;
+}
+
+.mapbox-directions-component-keyline,
+.mapbox-directions-origin {
+  display: none !important;
+  visibility: hidden !important;
 }

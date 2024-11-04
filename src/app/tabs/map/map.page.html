@@ -6,20 +6,26 @@
   rel="stylesheet">
 
 <ion-content scrollY="false">
-  <!-- <ion-input type="text"
-    [(ngModel)]="message"
-    placeholder="Your message"></ion-input> -->
-  <div class="flex">
-    <!-- <div>
 
-      <ion-title>Markers</ion-title>
+  <div class="destination-search">
+    <div class="block">
+      <ion-searchbar (ionInput)="inputChanged($event)"
+        animated="true"
+        placeholder="Search for location"></ion-searchbar>
+      <ion-list [hidden]="searchResult.length <= 0">
+        <ion-item [button]="true"
+          (click)="flyTo(result)"
+          *ngFor="let result of searchResult">
+          <ion-label>
+            {{result.Location}}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
 
-      <div *ngFor="let maker of markers">
-        <ion-button (click)="flyTo(maker)">{{ maker.properties.message }}</ion-button>
-        <ion-button (click)="removeMarker(maker.id)"
-          color="danger">delete</ion-button>
-      </div>
-    </div> -->
+
+  <div>
 
     <div #container
       id="mapa-box"
