@@ -89,6 +89,7 @@ export class MapPage implements OnInit {
     // Ensure map is resized correctly after load
     this.map.on('load', () => {
       this.map.resize();
+      this.trackUserLocation();
       const keyline = document.querySelector(
         '.mapbox-directions-component-keyline'
       ) as HTMLElement;
@@ -145,11 +146,11 @@ export class MapPage implements OnInit {
       profile: 'mapbox/driving',
       container: 'directions',
       bearing: true,
-      steps: true,
+      steps: false,
       voice_instructions: true,
       controls: {
         inputs: true,
-        instructions: true,
+        instructions: false,
         profileSwitcher: true,
       },
     });
@@ -159,6 +160,14 @@ export class MapPage implements OnInit {
       geolocate.trigger();
       this.setInitialOrigin();
       this.updateDirectionsDestination();
+      this.directions.on('route', () => {
+        const mapInst = document.querySelector(
+          '.mapbox-directions-instructions'
+        ) as HTMLElement;
+        if (mapInst) {
+          mapInst.style.display = 'none';
+        }
+      });
     });
 
     function locateUser(e: any) {
@@ -183,6 +192,26 @@ export class MapPage implements OnInit {
         { enableHighAccuracy: true }
       );
     }
+  }
+
+  trackUserLocation() {
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      trackUserLocation: true,
+      showUserHeading: true,
+    });
+
+    geolocate.on('geolocate', (e) => {
+      const userCoordinates = [e.coords.longitude, e.coords.latitude];
+
+      // Update the origin whenever the user's location changes
+      this.directions.setOrigin(userCoordinates);
+    });
+
+    this.map.addControl(geolocate, 'bottom-right');
+    geolocate.trigger(); // Trigger geolocation immediately
   }
 
   async inputChanged($event): Promise<void> {
