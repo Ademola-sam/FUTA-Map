@@ -89,7 +89,6 @@ export class MapPage implements OnInit {
     // Ensure map is resized correctly after load
     this.map.on('load', () => {
       this.map.resize();
-      this.trackUserLocation();
       const keyline = document.querySelector(
         '.mapbox-directions-component-keyline'
       ) as HTMLElement;
