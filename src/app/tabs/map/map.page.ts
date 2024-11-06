@@ -194,26 +194,6 @@ export class MapPage implements OnInit {
     }
   }
 
-  trackUserLocation() {
-    const geolocate = new mapboxgl.GeolocateControl({
-      positionOptions: {
-        enableHighAccuracy: true,
-      },
-      trackUserLocation: true,
-      showUserHeading: true,
-    });
-
-    geolocate.on('geolocate', (e) => {
-      const userCoordinates = [e.coords.longitude, e.coords.latitude];
-
-      // Update the origin whenever the user's location changes
-      this.directions.setOrigin(userCoordinates);
-    });
-
-    this.map.addControl(geolocate, 'bottom-right');
-    geolocate.trigger(); // Trigger geolocation immediately
-  }
-
   async inputChanged($event): Promise<void> {
     const value = $event.target.value;
     if (value.length <= 0) {
