@@ -1,0 +1,52 @@
+<ion-header [translucent]="true">
+    <ion-toolbar color="tertiary">
+        <ion-title>Feedback and Suggestions</ion-title>
+      </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-list lines="full">
+        <ion-item>
+            <ion-label position="floating">Overall Satisfaction</ion-label>
+      <!--       <ion-rating [(ngModel)]="" color="primary"></ion-rating> -->
+          </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Feedback Categories</ion-label>
+            <ion-select multiple
+        okText="Okay"
+        cancelText="Cancel">
+                <ion-select-option value="bug">Bug report or technical issue</ion-select-option>
+                <ion-select-option value="feature">Feature suggestion or request</ion-select-option>
+                <ion-select-option value="ux">User experience and usability</ion-select-option>
+                <ion-select-option value="content">Content accuracy or updates</ion-select-option>
+                <ion-select-option value="accessibility">Accessibility concern</ion-select-option>
+              </ion-select>
+          </ion-item>
+
+        <ion-card>
+            <ion-item>
+              <ion-label position="floating">Tell Us More</ion-label>
+              <ion-textarea rows="6"></ion-textarea>
+            </ion-item>
+          </ion-card>
+
+        <ion-card>
+          <ion-item>
+              <ion-label position="floating">Attach a screenshot or file (optional)</ion-label>
+              <ion-input class="ion-padding"
+          type="file"></ion-input>
+            </ion-item>
+          </ion-card>
+
+        <ion-card>
+          <ion-item>
+              <ion-label position="floating">How can we improve?</ion-label>
+              <ion-textarea rows="6"></ion-textarea>
+            </ion-item>
+        </ion-card>
+
+        <ion-button expand="block"
+      color="tertiary">Submit Feedback</ion-button>
+      </ion-list>
+</ion-content>

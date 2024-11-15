@@ -11,6 +11,10 @@ const routes: Routes = [
   {
     path: 'add-location',
     loadChildren: () => import('./add-location/add-location.module').then( m => m.AddLocationPageModule)
+  },
+  {
+    path: 'feedback',
+    loadChildren: () => import('./feedback/feedback.module').then( m => m.FeedbackPageModule)
   }
 ];
 
