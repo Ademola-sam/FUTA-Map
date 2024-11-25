@@ -1,52 +1,70 @@
-<ion-header [translucent]="true">
-    <ion-toolbar color="tertiary">
-        <ion-title>Feedback and Suggestions</ion-title>
-      </ion-toolbar>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+    <ion-title>Feedback and Suggestions</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-    <ion-list lines="full">
-        <ion-item>
-            <ion-label position="floating">Overall Satisfaction</ion-label>
-      <!--       <ion-rating [(ngModel)]="" color="primary"></ion-rating> -->
-          </ion-item>
+  <div class="w-full flex items-center justify-center">
+    <ion-card class="ion-padding">
+      <form [formGroup]="feedbackForm">
+        <ion-list>
+          <!-- <ion-label position="floating">Feedback Categories</ion-label> -->
 
-        <ion-item>
-            <ion-label position="floating">Feedback Categories</ion-label>
-            <ion-select multiple
-        okText="Okay"
-        cancelText="Cancel">
-                <ion-select-option value="bug">Bug report or technical issue</ion-select-option>
-                <ion-select-option value="feature">Feature suggestion or request</ion-select-option>
-                <ion-select-option value="ux">User experience and usability</ion-select-option>
-                <ion-select-option value="content">Content accuracy or updates</ion-select-option>
-                <ion-select-option value="accessibility">Accessibility concern</ion-select-option>
-              </ion-select>
-          </ion-item>
+          <ion-select
+            multiple
+            label="Feedback Categories"
+            placeholder="Feedback Categories"
+          >
+            <ion-select-option value="bug"
+              >Bug report or technical issue</ion-select-option
+            >
+            <ion-select-option value="feature"
+              >Feature suggestion or request</ion-select-option
+            >
+            <ion-select-option value="ux"
+              >User experience and usability</ion-select-option
+            >
+            <ion-select-option value="content"
+              >Content accuracy or updates</ion-select-option
+            >
+            <ion-select-option value="accessibility"
+              >Accessibility concern</ion-select-option
+            >
+          </ion-select>
 
-        <ion-card>
-            <ion-item>
-              <ion-label position="floating">Tell Us More</ion-label>
-              <ion-textarea rows="6"></ion-textarea>
-            </ion-item>
-          </ion-card>
+          <ion-item>
+            <ion-textarea
+              label="Tell us more"
+              labelPlacement="floating"
+              rows="3"
+            ></ion-textarea>
+          </ion-item>
 
-        <ion-card>
-          <ion-item>
-              <ion-label position="floating">Attach a screenshot or file (optional)</ion-label>
-              <ion-input class="ion-padding"
-          type="file"></ion-input>
-            </ion-item>
-          </ion-card>
+          <ion-item class="ion-no-border">
+            <ion-label position="floating" class="mb-16 text-xs"
+              >Attach a screenshot or file (optional)</ion-label
+            >
+            <ion-input class="ion-padding" type="file"></ion-input>
+          </ion-item>
+        </ion-list>
 
-        <ion-card>
-          <ion-item>
-              <ion-label position="floating">How can we improve?</ion-label>
-              <ion-textarea rows="6"></ion-textarea>
-            </ion-item>
-        </ion-card>
+        <ion-item>
+          <ion-label position="floating">How can we improve?</ion-label>
+          <ion-textarea rows="2"></ion-textarea>
+        </ion-item>
 
-        <ion-button expand="block"
-      color="tertiary">Submit Feedback</ion-button>
-      </ion-list>
+        <ion-button
+          expand="block"
+          type="submit"
+          [disabled]="!feedbackForm.valid"
+          class="mt-7"
+          >Submit</ion-button
+        >
+      </form>
+    </ion-card>
+  </div>
 </ion-content>

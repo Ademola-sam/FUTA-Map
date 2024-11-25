@@ -7,14 +7,18 @@ import { IonicModule } from '@ionic/angular';
 import { FeedbackPageRoutingModule } from './feedback-routing.module';
 
 import { FeedbackPage } from './feedback.page';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { MaterialModule } from 'src/app/shared/material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    FeedbackPageRoutingModule
+    FeedbackPageRoutingModule,
+    SharedModule,
+    MaterialModule,
   ],
-  declarations: [FeedbackPage]
+  declarations: [FeedbackPage],
 })
 export class FeedbackPageModule {}

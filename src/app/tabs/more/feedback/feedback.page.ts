@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-feedback',
@@ -6,10 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./feedback.page.scss'],
 })
 export class FeedbackPage implements OnInit {
+  feedbackForm: FormGroup;
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
+    this.feedbackForm = new FormGroup({
+      email: new FormControl('', [Validators.required, Validators.email]),
+    });
   }
 
+  ngOnInit() {}
 }
