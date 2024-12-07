@@ -1,36 +1,44 @@
-<link rel="stylesheet"
+<link
+  rel="stylesheet"
   href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.3.1/mapbox-gl-directions.css"
-  type="text/css">
+  type="text/css"
+/>
 
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css"
-  rel="stylesheet">
+<link
+  href="https://api.mapbox.com/mapbox-gl-js/v3.7.0/mapbox-gl.css"
+  rel="stylesheet"
+/>
 
 <ion-content scrollY="false">
-
   <div class="destination-search">
     <div class="block">
-      <ion-searchbar (ionInput)="inputChanged($event)"
+      <ion-searchbar
+        value="{{searchLocation}}"
+        (ionInput)="inputChanged($event)"
         animated="true"
-        placeholder="Search for location"></ion-searchbar>
-      <ion-list [hidden]="searchResult.length <= 0"
-        class="overflow-y-scroll max-h-96">
-        <ion-item [button]="true"
+        placeholder="Search for location"
+      ></ion-searchbar>
+      <ion-list
+        [hidden]="searchResult.length <= 0"
+        class="overflow-y-scroll max-h-96"
+      >
+        <ion-item
+          [button]="true"
           (click)="flyTo(result)"
-          *ngFor="let result of searchResult">
-          <ion-label>
-            {{result.Location}}
-          </ion-label>
+          *ngFor="let result of searchResult"
+        >
+          <ion-label> {{result.Location}} </ion-label>
         </ion-item>
       </ion-list>
     </div>
   </div>
 
-
   <div>
-
-    <div #container
+    <div
+      #container
       id="mapa-box"
       class="map"
-      style="width: 100%; height: 94vh;"></div>
+      style="width: 100%; height: 94vh"
+    ></div>
   </div>
 </ion-content>

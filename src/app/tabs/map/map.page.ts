@@ -29,6 +29,7 @@ export class MapPage implements OnInit {
   markers: any;
 
   directions: any;
+  searchLocation: string;
 
   constructor(private ds: DataService, private ld: LocationDataService) {
     (mapboxgl as any).accessToken = environment.MAPBOX_KEY.accessToken;
@@ -214,7 +215,9 @@ export class MapPage implements OnInit {
     this.setDestination = [data.Latitude, data.Longitude];
     this.updateDirectionsDestination();
     this.searchResult = [];
-    return;
+    this.inputChanged({ target: { value: '' } });
+    this.searchLocation = '';
+    this.searchLocation = data.Location;
   }
 
   updateDirectionsDestination() {
