@@ -12,3 +12,33 @@
     color: rgb(203, 203, 203);
   }
 }
+
+.big-card {
+  height: 150px;
+  width: 100%;
+  margin: 20px 0;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #5e742d40;
+}
+
+.big-card ion-card-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.notification-bar {
+  background-color: #f4f4f4;
+  padding: 20px;
+  margin: 5px;
+  border-radius: 15px;
+}
+
+ion-button {
+  --background: #6c5ce7; /* purple color */
+  --background-activated: #6c5ce7; /* darker purple color on click */
+}
+
